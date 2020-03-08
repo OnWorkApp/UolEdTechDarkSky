@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="WeatherApp.MainPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="labelStyle" 
+                   TargetType="Label">
+                <Setter Property="FontSize" 
+                        Value="Small" />
+                <Setter Property="TextColor" 
+                        Value="Gray" />
+            </Style>
+
+            <Style x:Key="labelResultStyle" 
+                   TargetType="Label">
+                <Setter Property="FontSize" 
+                        Value="Medium" />
+                <Setter Property="Margin" 
+                        Value="10,0,0,0" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <Grid VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <!--<RowDefinition Height="Auto"/>-->
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Image Source="overlay.png" Aspect="Fill" HeightRequest="350" VerticalOptions="StartAndExpand"/>
+        
+        <!-- Informar a cidade ============================================================================== -->
+        <!--  Left={Left}, Top={Top}, Right={Right}, Bottom={Bottom} -->
+        <Grid Padding="10,10,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label Text="Pesquise por Cidade" 
+                   Grid.ColumnSpan="3"
+                   HorizontalOptions="Center"
+                   TextColor="White" 
+                   FontAttributes="Bold" 
+                   FontSize="Medium" />
+
+            <Label Text="Cidade:" 
+                   Grid.Row="1" 
+                   VerticalOptions="Center"
+                   Style="{StaticResource labelStyle}"
+                   TextColor="#C0C0C0" />
+
+            <Entry x:Name="_cityEntry"
+                   Grid.Row="1" 
+                   Grid.Column="1"
+                   Margin="5,0"
+                   VerticalOptions="Center"
+                   BackgroundColor="DarkGray"
+                   TextColor="White"
+                   Text="" />
+
+            <Button Grid.Row="1" 
+                    Grid.Column="2"
+                    Text="Pesquisar" 
+                    BorderWidth="1"
+                    BorderColor="White"
+                    BackgroundColor="DarkGray"
+                    TextColor="White" 
+                    FontSize="Micro"                     
+                    Clicked="OnGetWeatherButtonClicked"/>
+        </Grid>
+
+        <!-- ================================================================================================ -->
+        <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center" VerticalOptions="Start" Margin="10,110, 0, 10">
+            <Label Text="{Binding DarkSky_Cidade}" FontSize="34" VerticalOptions="Center" HorizontalOptions="Center" TextColor="AntiqueWhite"/>
+        </StackLayout>
+        <StackLayout Orientation="Vertical" Margin="0, 85, 0, 0" HorizontalOptions="Center" VerticalOptions="Center">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Image Source="weather.png" WidthRequest="50" HeightRequest="50" VerticalOptions="Center"/>
+                <Label Text="{Binding DarkSky_Temperatura}" TextColor="White" FontSize="70" FontAttributes="Bold" VerticalOptions="Center"/>
+                <Label Text="°C" TextColor="White" FontSize="34" VerticalOptions="Center"/>
+            </StackLayout>
+            <Label Text="{Binding DarkSky_Descritivo}" Margin="10,-10, 0, 10" TextColor="White" FontSize="16" HorizontalOptions="Center"/>
+            <Label Text="{Binding DarkSky_DataHora}"   Margin="10,-14, 0, 10" TextColor="White" FontSize="12" HorizontalOptions="Center"/>
+        </StackLayout>
+        
+        <Frame Grid.Row="1" HasShadow="True" CornerRadius="10" Margin="20,-57,20,0" Padding="0" HeightRequest="120" VerticalOptions="Start">
+            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
+                    <Image Source="humidity.png" HeightRequest="25" HorizontalOptions="Center"/>
+                    <StackLayout Spacing="7" HorizontalOptions="CenterAndExpand">
+                        <Label Text="{Binding DarkSky_Humidade}" TextColor="Black" FontSize="14" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Humidade" TextColor="#7D7D7D" FontSize="11" HorizontalOptions="Center"/>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Grid.Column="1" Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
+                    <Image Source="wind.png" HeightRequest="25" HorizontalOptions="Center"/>
+                    <StackLayout Spacing="7" HorizontalOptions="CenterAndExpand">
+                        <Label Text="{Binding DarkSky_Vento}" TextColor="Black" FontSize="14" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Vento" TextColor="#7D7D7D" FontSize="11" HorizontalOptions="Center"/>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Grid.Column="2" Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
+                    <Image Source="pressure.png" HeightRequest="25" HorizontalOptions="Center"/>
+                    <StackLayout Spacing="7" HorizontalOptions="CenterAndExpand">
+                        <Label Text="{Binding DarkSky_Pressao}" TextColor="Black" FontSize="14" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Pressão" TextColor="#7D7D7D" FontSize="11" HorizontalOptions="Center"/>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Grid.Column="3" Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
+                    <Image Source="cloudiness.png" HeightRequest="25" HorizontalOptions="Center"/>
+                    <StackLayout Spacing="7" HorizontalOptions="CenterAndExpand">
+                        <Label Text="{Binding DarkSky_Nebulosa}" TextColor="Black" FontSize="14" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Nebulosidade" TextColor="#7D7D7D" FontSize="11" HorizontalOptions="Center"/>
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+        </Frame>
+
+        <!--  Left={Left}, Top={Top}, Right={Right}, Bottom={Bottom} -->
+        <ListView x:Name="WeatherForecastList" ItemsSource="{Binding Weathers}" SeparatorVisibility="None" Grid.Row="3" Margin="20,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <ListView.ItemTemplate>
+                <DataTemplate >
+                    <ViewCell>
+                        <Frame BackgroundColor="White" BorderColor="#F0F0F0" Padding="1" Margin="0,0,0,5" HasShadow="true">
+                            <Grid HeightRequest="70" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Date}" TextColor="#757575" FontSize="14" VerticalOptions="Center" Margin="10,0"/>
+                                <Image       Grid.Column="1" Source="{Binding Icon}"  Margin="-60, 0, 0,  0" WidthRequest="38" HeightRequest="38" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <StackLayout Grid.Column="2" Orientation="Horizontal" Margin="-80, 0, 20, 0" HorizontalOptions="End" VerticalOptions="Center">
+                                    <Label Text="{Binding TempMin}" TextColor="Black" Margin="  0, 0,  0, 0" FontSize="24" FontAttributes="Bold" VerticalOptions="Center"/>
+                                    <Label Text="°C" TextColor="Black" FontSize="15"  Margin=" -5, 0, 20, 0" VerticalOptions="Center"/>
+                                    <Label Text="{Binding TempMax}" TextColor="Black" Margin="  0, 0,  0, 0" FontSize="24" FontAttributes="Bold" VerticalOptions="Center"/>
+                                    <Label Text="°C" TextColor="Black" FontSize="15"  Margin=" -5, 0,  0, 0" VerticalOptions="Center"/>
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+
+</ContentPage>
