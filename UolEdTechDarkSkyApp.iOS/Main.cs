@@ -5,7 +5,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
-namespace WeatherApp.iOS
+namespace UOLEdTechDarkSky.iOS
 {
     public class Application
     {

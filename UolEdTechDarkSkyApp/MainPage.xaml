@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="WeatherApp.MainPage">
+             x:Class="UOLEdTechDarkSky.MainPage">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -164,6 +164,8 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <ActivityIndicator Color="#BC4C1B" IsRunning="{Binding IsBusy}"  IsVisible="{Binding IsBusy}" />
+
     </Grid>
 
 </ContentPage>

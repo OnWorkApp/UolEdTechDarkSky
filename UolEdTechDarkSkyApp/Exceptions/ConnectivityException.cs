@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WeatherApp.Exceptions
+namespace UOLEdTechDarkSky.Exceptions
 {
     public class ConnectivityException : Exception
     {

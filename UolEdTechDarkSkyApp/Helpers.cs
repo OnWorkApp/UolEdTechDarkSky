@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WeatherApp
+namespace UOLEdTechDarkSky
 {
 
     /// <summary>

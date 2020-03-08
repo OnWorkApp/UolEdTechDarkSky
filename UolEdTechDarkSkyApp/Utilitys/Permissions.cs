@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 
 
-namespace WeatherApp.Utilitys
+namespace UOLEdTechDarkSky.Utilitys
 {
     public static class Permissions
 	{

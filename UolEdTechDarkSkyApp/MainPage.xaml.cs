@@ -9,15 +9,15 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using DarkSkyApi;
 using DarkSkyApi.Models;
-using WeatherApp.Exceptions;
-using WeatherApp.Utilitys;
+using UOLEdTechDarkSky.Exceptions;
+using UOLEdTechDarkSky.Utilitys;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using Plugin.Geolocator;
 
 
 
-namespace WeatherApp
+namespace UOLEdTechDarkSky
 {
     // Learn more about making custom code visible in the Xamarin.Forms previewer
     // by visiting https://aka.ms/xamarinforms-previewer
@@ -31,6 +31,19 @@ namespace WeatherApp
         private const double BarueriLongitude  = -122.423;
         private static double LocalLatitude    = -2.5368808;
         private static double LocalLongitude   = -46.645944;
+        private bool _IsBusy = false;
+        public bool IsBusy
+        {
+            get => _IsBusy;
+            set
+            {
+                _IsBusy = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsNotBusy));
+            }
+        }
+
+        public bool IsNotBusy { get => !_IsBusy; }
 
         #region variaveis MVVM
         //-- Dados dos Proximos 7 dias -----------------------------------------------------------------------
@@ -73,11 +86,22 @@ namespace WeatherApp
             DarkSky_Temperatura = "";
             DarkSky_UF          = "SP";
             DarkSky_Cidade      = "SÃO PAULO, " + DarkSky_UF;
-            DarkSky_Descritivo  = "";
+            DarkSky_Descritivo  = "Dia nublado";
             DarkSky_DataHora    = DateTime.Now.Day.ToString("D2") + " de Março - " + DateTime.Now.ToString("HH:mm") + "Hs";
+
+            //-- Valores Padrões ----------------------------------------------------------------------- 
+            DarkSky_Descritivo  = "Dia nublado";
+            DarkSky_Temperatura = "26";
+            DarkSky_Humidade    = "25%";
+            DarkSky_Vento       = "6.21 m/s";
+            DarkSky_Pressao     = "1013.03 hpa";
+            DarkSky_Nebulosa    = "20%";
+            LocalLatitude       = -2.5368808;
+            LocalLongitude      = -46.645944;
+
             //------------- Chama a API depois de 2 segundos, pede autorização para acessar GPS ----------------
             Device.StartTimer(TimeSpan.FromSeconds( 1), () => { _GetWeatherDataAsync(); return false; });     //Só executa uma vez ao carregar o app
-            Device.StartTimer(TimeSpan.FromSeconds(10), () => { _GetWeatherDataAsync(); return true ; });     //Só executa a cada X segundos, atualizando a tela
+            Device.StartTimer(TimeSpan.FromSeconds(15), () => { _GetWeatherDataAsync(); return true ; });     //Só executa a cada X segundos, atualizando a tela
         }
 
 
@@ -115,7 +139,7 @@ namespace WeatherApp
                         LocalLongitude = pPosition.Longitude;
                     }
                 } //Se não tiver permissão, pega um valor predefinido, para não complicar
-
+                IsBusy              = true;
                 var client          = new DarkSkyService(_constApiKey);
                 Forecast sResult    = await client.GetWeatherDataAsync(LocalLatitude, LocalLongitude, Unit.CA);
                 DarkSky_Descritivo  = sResult.Currently.Summary.ToString();                       //Tem que traduzir
@@ -124,7 +148,7 @@ namespace WeatherApp
                 DarkSky_Vento       = sResult.Currently.WindSpeed.ToString()+" m/s";
                 DarkSky_Pressao     = sResult.Currently.Pressure.ToString()+" hpa";
                 DarkSky_Nebulosa    = sResult.Currently.Visibility.ToString("0")+"%";
-                //-- Proximo 7 dias ----------------------------------------------------------------------- Peguei temperatura mais alta, o certo seria informar min e max na tela
+                //-- Proximo 6 dias ----------------------------------------------------------------------- Peguei temperatura mais alta, o certo seria informar min e max na tela
                 DarkSky_Temp1DiaMin = sResult.Daily.Days[0].LowTemperature.ToString("0");
                 DarkSky_Temp2DiaMin = sResult.Daily.Days[1].LowTemperature.ToString("0");
                 DarkSky_Temp3DiaMin = sResult.Daily.Days[2].LowTemperature.ToString("0");
@@ -139,11 +163,13 @@ namespace WeatherApp
                 DarkSky_Temp6DiaMax = sResult.Daily.Days[5].HighTemperature.ToString("0");
                 //-----------------------------------------------------------------------------------------
                 Weathers = WeatherDataPreenchido();
+                await Task.Delay(475);
             }
             catch (Exception ex)
                 {
                 System.Diagnostics.Debug.WriteLine($"_GetWeatherDataAsync Error: {ex.Message + " " + ex.InnerException }");
             }
+            IsBusy = false;
         }
 
 
@@ -151,12 +177,12 @@ namespace WeatherApp
         private List<Weather> WeatherData()
         {
             var tempList = new List<Weather>();
-            tempList.Add(new Weather { TempMin = "0", TempMax = "29", Date = "Quarta ", Icon = "weather.png" });
-            tempList.Add(new Weather { TempMin = "0", TempMax = "29", Date = "Quinta" , Icon = "weather.png" });
-            tempList.Add(new Weather { TempMin = "0", TempMax = "29", Date = "Sexta"  , Icon = "weather.png" });
-            tempList.Add(new Weather { TempMin = "0", TempMax = "29", Date = "Sábado" , Icon = "weather.png" });
-            tempList.Add(new Weather { TempMin = "0", TempMax = "29", Date = "Domingo", Icon = "weather.png" });
-            tempList.Add(new Weather { TempMin = "0", TempMax = "29", Date = "Segunda", Icon = "weather.png" });
+            tempList.Add(new Weather { TempMin = "20", TempMax = "29", Date = "Quarta ", Icon = "weather.png" });
+            tempList.Add(new Weather { TempMin = "23", TempMax = "27", Date = "Quinta" , Icon = "weather.png" });
+            tempList.Add(new Weather { TempMin = "25", TempMax = "26", Date = "Sexta"  , Icon = "weather.png" });
+            tempList.Add(new Weather { TempMin = "22", TempMax = "25", Date = "Sábado" , Icon = "weather.png" });
+            tempList.Add(new Weather { TempMin = "24", TempMax = "24", Date = "Domingo", Icon = "weather.png" });
+            tempList.Add(new Weather { TempMin = "26", TempMax = "27", Date = "Segunda", Icon = "weather.png" });
             return tempList;
         }
         private List<Weather> WeatherDataPreenchido()

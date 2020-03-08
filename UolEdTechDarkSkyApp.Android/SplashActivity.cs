@@ -11,7 +11,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-namespace WeatherApp.Droid
+namespace UOLEdTechDarkSky.Droid
 {
     [Activity(Theme = "@style/Theme.Splash",
               MainLauncher = true,
